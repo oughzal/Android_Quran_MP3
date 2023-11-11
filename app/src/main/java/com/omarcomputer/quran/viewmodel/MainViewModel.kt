@@ -26,16 +26,5 @@ class MainViewModel(val app : Application) : AndroidViewModel(app) {
     var current = MutableLiveData<Sorat>()
 
      fun getSowar(){
-         val text = FilerHelper.getContentFromAssets(app.applicationContext,"list.json")
-         Log.i("QuranTag",text)
-        val moshi = Moshi.Builder()
-            .add(KotlinJsonAdapterFactory())
-            .build()
-
-         val adapter : JsonAdapter<List<Sorat>> = moshi.adapter(listType)
-
-        val data = adapter.fromJson(text)
-        Log.i("QuranTag",data?.size.toString()?:"")
-        sowar.value = data
     }
 }

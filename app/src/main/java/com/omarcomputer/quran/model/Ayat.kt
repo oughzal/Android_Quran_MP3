@@ -1,9 +1,14 @@
 package com.omarcomputer.quran.model
 
-import com.squareup.moshi.JsonClass
+import androidx.room.Entity
+import androidx.room.ForeignKey
 
-@JsonClass(generateAdapter = true)
+@Entity(tableName = "ayat",foreignKeys = [ForeignKey(entity = Sorat::class,
+    parentColumns = ["id"],
+    childColumns = ["sorat"],
+    onDelete = ForeignKey.CASCADE)])
 data class Ayat (
     val id : String,
-    val text : String
+    val text : String,
+    val sorat : String
         )

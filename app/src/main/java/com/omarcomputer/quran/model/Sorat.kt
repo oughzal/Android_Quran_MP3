@@ -1,8 +1,8 @@
 package com.omarcomputer.quran.model
 
-import com.squareup.moshi.JsonClass
+import androidx.room.Entity
 
-@JsonClass(generateAdapter = true)
+@Entity(tableName = "sorat")
 data class Sorat(
     val id : String,
     val name : String
