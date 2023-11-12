@@ -23,7 +23,7 @@ class MainViewModel(val app : Application) : AndroidViewModel(app) {
     private val quranDatabase =QuranDatabase.getDatabase(app)
     private val soratDao = quranDatabase.soratDao()
        init {
-        getSowar()
+
     }
     val text =""
     var sowar = MutableLiveData<List<Sorat>>()
@@ -31,14 +31,8 @@ class MainViewModel(val app : Application) : AndroidViewModel(app) {
     var current = MutableLiveData<Sorat>()
 
      fun getSowar(){
-         CoroutineScope(Dispatchers.IO).launch{
-             val data  = soratDao.getAllSorat()
-             sowar.postValue(data)
-             for(sorat in data){
-                 Log.i("QuranTAG",sorat.name!!)
-             }
-
-         }
+            val data  = soratDao.getAllSorat()
+             sowar.value = data
     }
 
 }

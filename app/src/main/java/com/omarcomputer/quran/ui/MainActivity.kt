@@ -15,6 +15,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
-        //mainViewModel.getData()
+        binding.btnMenu.setOnClickListener {
+
+        }
     }
 }
