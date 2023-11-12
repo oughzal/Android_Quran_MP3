@@ -55,7 +55,7 @@ class MainViewModel(val app : Application) : AndroidViewModel(app) {
     }
 
     fun nextAya(){
-        if(index < (ayat.value?.size ?: -1) -2 ){
+        if(index < (ayat.value?.size ?: -1) -1 ){
             index++
             currentAyat.value = ayat.value!![index]
         }

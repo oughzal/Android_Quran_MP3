@@ -55,6 +55,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         }
         mainViewModel.currentAyat.observe(this) {
+            binding.recyclerView.scrollToPosition(mainViewModel.index)
             mediaPlayer?.release()
 
             mediaPlayer = MediaPlayer().apply {
@@ -102,6 +103,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onItemClick(position: Int, view: View) {
+        mainViewModel.index = position
+
         mainViewModel.currentAyat.value = mainViewModel.ayat.value!![position]
     }
 
