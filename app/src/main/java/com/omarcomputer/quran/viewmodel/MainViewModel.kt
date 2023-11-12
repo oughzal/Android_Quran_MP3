@@ -16,6 +16,7 @@ import com.squareup.moshi.Types
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import java.util.Date
 
@@ -28,11 +29,38 @@ class MainViewModel(val app : Application) : AndroidViewModel(app) {
     val text =""
     var sowar = MutableLiveData<List<Sorat>>()
     var ayat = MutableLiveData<List<Ayat>>()
-    var current = MutableLiveData<Sorat>()
+    var currentSorat = MutableLiveData<Sorat>()
+    var currentAyat = MutableLiveData<Ayat>()
+    var index = 0
 
      fun getSowar(){
-            val data  = soratDao.getAllSorat()
-             sowar.value = data
+         CoroutineScope(Dispatchers.IO).launch {
+             val data  = soratDao.getAllSorat()
+             sowar.postValue(data)
+             currentSorat.postValue(data[0])
+             getAyat(data[0])
+         }
+
     }
+    fun getAyat(sorat: Sorat){
+
+        CoroutineScope(Dispatchers.IO).launch {
+            currentSorat.postValue(sorat)
+            val data  = soratDao.getAllAyat(sorat.id)
+            index = 0
+            currentAyat.postValue(data[0])
+            ayat.postValue(data)
+        }
+
+    }
+
+    fun nextAya(){
+        if(index < (ayat.value?.size ?: -1) -2 ){
+            index++
+            currentAyat.value = ayat.value!![index]
+        }
+    }
+
+
 
 }
