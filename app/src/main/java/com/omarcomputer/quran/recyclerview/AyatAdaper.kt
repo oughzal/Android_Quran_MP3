@@ -1,5 +1,7 @@
 package com.omarcomputer.quran.recyclerview
 
+import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,10 +15,11 @@ class AyatAdaper(val itemList : List<Ayat>,val listener :Listener) : RecyclerVie
     interface Listener{
         fun onItemClick(position: Int,view: View)
     }
-
+    var viewList = ArrayList<View>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView :View  = LayoutInflater.from(parent.context).inflate(R.layout.aya_item_layout,parent,false)
+        //viewList.clear();
         return ViewHolder(itemView)
     }
 
@@ -26,14 +29,24 @@ class AyatAdaper(val itemList : List<Ayat>,val listener :Listener) : RecyclerVie
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val ayaItem : Ayat = itemList[position]
+        viewList.add(holder.itemView)
+        Log.i("MyTAG",viewList.size.toString())
         val number = ayaItem.id.toInt() % 1000
         holder.ayaId.text = number.toString()
         holder.ayaText.text = ayaItem.text
 
     }
+     fun selectItem(position: Int){
+        for(view in viewList){
+            view.setBackgroundResource(R.drawable.rectangle)
+        }
+         viewList[position].setBackgroundResource(R.drawable.grayrectangle)
+    }
    inner class ViewHolder(itemView : View) :RecyclerView.ViewHolder(itemView) {
         init {
+
             itemView.setOnClickListener {
+                selectItem(adapterPosition )
                 listener.onItemClick(adapterPosition,itemView)
             }
         }

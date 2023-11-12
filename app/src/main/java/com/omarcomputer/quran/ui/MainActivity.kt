@@ -49,16 +49,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         mainViewModel.ayat.observe(this) {
             mainViewModel.currentAyat.value = it[0]
             ayatList.clear()
+            ayatAdaper.viewList.clear()
             ayatList.addAll(it)
             ayatAdaper.notifyDataSetChanged()
             binding.recyclerView.scrollToPosition(0)
 
         }
         mainViewModel.currentAyat.observe(this) {
-            binding.recyclerView.scrollToPosition(mainViewModel.index)
+            val index = mainViewModel.index.value?:0
+            binding.recyclerView.scrollToPosition(index)
+
             mediaPlayer?.release()
 
             mediaPlayer = MediaPlayer().apply {
+
                 binding.btnPlay.isEnabled = false
                 binding.btnPlay.setImageResource(R.drawable.pause)
                 val url = MP3_BASE_URL + it.id + ".mp3"
@@ -69,6 +73,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     isPaused = false
                     binding.btnPlay.setImageResource(R.drawable.pause)
                     mediaPlayer?.start()
+                    ayatAdaper.selectItem(index)
 
                 }
                 setOnCompletionListener {
@@ -96,14 +101,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
         private fun showSorat(sorat: Sorat){
             mainViewModel.getAyat(sorat)
-            Log.i("SoratTAG",sorat.name.toString())
         }
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         return true
     }
 
     override fun onItemClick(position: Int, view: View) {
-        mainViewModel.index = position
+        ayatAdaper.selectItem(position)
+        mainViewModel.index.value = position
 
         mainViewModel.currentAyat.value = mainViewModel.ayat.value!![position]
     }

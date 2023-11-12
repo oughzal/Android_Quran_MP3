@@ -31,7 +31,7 @@ class MainViewModel(val app : Application) : AndroidViewModel(app) {
     var ayat = MutableLiveData<List<Ayat>>()
     var currentSorat = MutableLiveData<Sorat>()
     var currentAyat = MutableLiveData<Ayat>()
-    var index = 0
+    var index = MutableLiveData<Int>(0)
 
      fun getSowar(){
          CoroutineScope(Dispatchers.IO).launch {
@@ -47,7 +47,7 @@ class MainViewModel(val app : Application) : AndroidViewModel(app) {
         CoroutineScope(Dispatchers.IO).launch {
             currentSorat.postValue(sorat)
             val data  = soratDao.getAllAyat(sorat.id)
-            index = 0
+            index.postValue(0)
             currentAyat.postValue(data[0])
             ayat.postValue(data)
         }
@@ -55,9 +55,9 @@ class MainViewModel(val app : Application) : AndroidViewModel(app) {
     }
 
     fun nextAya(){
-        if(index < (ayat.value?.size ?: -1) -1 ){
-            index++
-            currentAyat.value = ayat.value!![index]
+        if(index.value!! < (ayat.value?.size ?: -1) -1 ){
+            index.value = index.value!! +1
+            currentAyat.value = ayat.value!![index.value!!]
         }
     }
 
